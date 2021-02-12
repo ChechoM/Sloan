@@ -1,6 +1,6 @@
 <?php
 	include_once"../conexion.php";
-	$sentencia_select=$con->prepare('SELECT * FROM prestamos ORDER BY id_prestamo ASC');
+	$sentencia_select=$con->prepare('SELECT * FROM prestamos ORDER BY id_prestamo DESC');
 	$sentencia_select->execute();
 	$resultado=$sentencia_select->fetchAll();
 
@@ -42,9 +42,9 @@
                 <div class="col-12">
                     <nav class="navbar navbar-dark align-items-center">
                         <a class="navbar-brand" href="../home1.php">
-                            <span><i class="fas fa-home fa-2x"></i></span>
-                            <h2 class="text-white h2 text-center d-inline">Administrador</h2>
+                            <span><i class="fas fa-home"></i></span>
                         </a>
+                        <h2 class="text-white h2 text-center">Administrador</h2>
                         <button class="navbar-toggler border-white" 
                             type="button" 
                             data-toggle="collapse" 
@@ -64,7 +64,7 @@
                                 <li class="nav-item"><a class="nav-link text-white h6" href="inventario.php">Inventario</a></li>
                                 <li class="nav-item"><a class="nav-link text-white h6" href="usuarios.php">Usuarios</a></li>
                                 <li><div class="dropdown-divider"></div></li>
-                                <li class="nav-item"><a class="nav-link text-white h6" href="../index.php">Salir</a></li>
+                                <li class="nav-item"><a class="nav-link text-white h6" href="../ingresoUsuarios.php">Salir</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -79,16 +79,16 @@
                     <img src="../img/Fondo.jpeg" class="d-block w-100 h-100" alt="Logo Carrusel">
                 </div>
                 <div class="carousel-caption d-sm-block mt-sm-5 d-md-block">
-                    <h1 class="display-2 text-white mb-5 d-none d-md-block">Préstamos</h1>
+                    <h1 class="display-2 text-white mb-5 d-none d-md-block">Préstamo</h1>
 					<form class="row text-center justify-content-center align-items-center" method="post">
 	                    <div class="col-12 input-group mb-3">
                             <span class="input-group-text mb-5" id="basic-addon1"><i class="fas fa-search"></i></span>
 							<input type="text" class="form-control mb-5" name="buscar" placeholder="Buscar préstamo" value="<?php if(isset($buscar_text)) echo $buscar_text; ?>">
                             <input type="submit" class="btn btn-warning text-white btn-lg mb-5 d-inline-flex" name="btn_buscar" value="Buscar">
 	                    </div>
-                        <!-- <div class="col-12">
+                        <div class="col-12">
                             <a href="insert_prestamos.php" class="btn btn-success text-white btn-lg mb-5 shadow">Generar Préstamo</a>							
-                        </div> -->
+                        </div>
 					</form>
                 </div>
             </div>
@@ -104,11 +104,14 @@
                         <thead>
                             <tr class="text-center">
                                 <th class="h5" scope="col">Id. Préstamo</th>
-                                <th class="h5" scope="col">Id. Usuario</th>
+                                <th class="h5" scope="col">Carnet</th>
                                 <th class="h5" scope="col">Nombre</th>
                                 <th class="h5" scope="col">Apellido</th>
                                 <th class="h5" scope="col">Id. Artículo</th>
                                 <th class="h5" scope="col">Artículo</th>
+                                <th class="h5" scope="col">Fecha</th>
+                                <th class="h5" scope="col">Hora</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -123,13 +126,50 @@
                                     $articulo = $sentencia_select->fetchAll();
                                 
                                     foreach ($articulo as $f_art){}
+
+                                    $sentencia_select = $con->prepare('SELECT * FROM articulos ORDER BY id_articulo DESC');
+                                    $sentencia_select->execute();
+                                    $disponibilidad = $sentencia_select->fetchAll();
+
+                                    $sentencia_select = $con->prepare('SELECT * FROM usuarios ORDER BY id_usuario DESC');
+                                    $sentencia_select->execute();
+                                    $est_usuario = $sentencia_select->fetchAll();
+                                    
+
+                                    //verifica que artículos estan prestados                                   
+                                    foreach ($disponibilidad as $f_disp){
+                                        foreach ($est_usuario as $f_us){
+                                            if ($f_disp['id_articulo'] == $f_dev['id_articulo'] && $f_us['id_usuario']== $f_dev['id_usuario']){                                                
+                                                if($f_disp['disponibilidad'] == 2 && $f_us['estado_usuario']==2){                                                                                                
+                                                    $estado = "class = \"h6 text-light bg-danger bg-chek\"";
+                                                }else {$estado ="class = \"h6\"";}
+                                            }
+                                        }
+                                    }
+                                    $sentencia_select=$con->prepare('CALL select_detprest(?)');
+                                    $sentencia_select->bindParam(1, $f_dev['id_prestamo'], PDO::PARAM_INT);
+                                    $sentencia_select->execute();
+                                    $detalle = $sentencia_select->fetchAll();
+                                   
+                                    foreach ($detalle as $f_det){}
+
+                                    date_default_timezone_set('UTC');
+                                    $fechaPrestamo = $f_det['fecha_Prestamo'];
+                                    $fechaActual = date("Y-m-d");
+                                    
                                 ?>
                                 <th class="h6" scope="row"><?php echo $f_dev['id_prestamo']; ?> </th>
-                                <td class="h6"><?php echo $f_dev['id_usuario']; ?> </td>
+                                <td class="h6"><?php echo $f_art['numero_carnet']; ?> </td>
                                 <td class="h6"><?php echo $f_art['nombre']; ?></td>
                                 <td class="h6"><?php echo $f_art['apellido']; ?></td>
                                 <td class="h6"><?php echo $f_dev['id_articulo']; ?></td>
-                                <td class="h6"><?php echo $f_art['nombre_articulo']; ?></td>
+                                <td  <?php echo $estado;  ?> ><?php echo $f_art['nombre_articulo']; ?></td>
+                                <td class="h6"><?php echo $f_det['fecha_Prestamo']; ?></td>
+                                <td class="h6"><?php echo $f_det['hora_prestamo']; ?></td>
+
+
+                                
+
                             </tr>
                             <?php endforeach ?>
                         </tbody>

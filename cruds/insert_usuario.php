@@ -1,26 +1,30 @@
 <?php
 	include_once "../conexion.php";
 	if (isset($_POST['btn_guardar'])){
-		$tipo_usuario=$_POST['tipo_usuario'];
-		$nombre=$_POST['nombre'];
-		$apellido=$_POST['apellido'];
-		$numero_carnet=$_POST['numero_carnet'];
-		$estado_usuario=$_POST['estado_usuario'];
-		$contrasenia=$_POST['contrasenia'];
-		if (!empty ($tipo_usuario) && !empty ($nombre) && !empty($apellido) && !empty($numero_carnet) && !empty($estado_usuario) && !empty($contrasenia)){
-			$insert_usuario= $con-> prepare ('INSERT INTO usuarios(tipo_usuario,nombre,apellido,numero_carnet,estado_usuario,contrasenia) VALUES (:tipo_usuario,:nombre,:apellido,:numero_carnet,:estado_usuario,:contrasenia)');
-			$insert_usuario-> execute(array(			
-			':tipo_usuario'=>$tipo_usuario,
-			':nombre'=>$nombre,
-			':apellido'=>$apellido,
-			':numero_carnet'=>$numero_carnet,
-			':estado_usuario'=>$estado_usuario,
-			':contrasenia'=>$contrasenia
-		));
-		header('location: usuarios.php');
-		}
-		else {
-			echo ("los campos estan vacios");
+		if($_POST['tipo_usuario']== 3 || $_POST['tipo_usuario']== 4){
+			$tipo_usuario=$_POST['tipo_usuario'];
+			$nombre=$_POST['nombre'];
+			$apellido=$_POST['apellido'];
+			$numero_carnet=$_POST['numero_carnet'];
+			$estado_usuario=$_POST['estado_usuario'];
+			$contrasenia=$_POST['contrasenia'];
+			if (!empty ($tipo_usuario) && !empty ($nombre) && !empty($apellido) && !empty($numero_carnet) && !empty($estado_usuario) && !empty($contrasenia)){
+				$insert_usuario= $con-> prepare ('INSERT INTO usuarios(tipo_usuario,nombre,apellido,numero_carnet,estado_usuario,contrasenia) VALUES (:tipo_usuario,:nombre,:apellido,:numero_carnet,:estado_usuario,:contrasenia)');
+				$insert_usuario-> execute(array(			
+				':tipo_usuario'=>$tipo_usuario,
+				':nombre'=>$nombre,
+				':apellido'=>$apellido,
+				':numero_carnet'=>$numero_carnet,
+				':estado_usuario'=>$estado_usuario,
+				':contrasenia'=>$contrasenia
+			));
+			header('location: usuarios.php');
+			}
+			else {
+				echo ("los campos estan vacios");
+			}
+		}else {
+			echo"el tipo de usuario no se admite";
 		}
 	}
 ?>
@@ -53,9 +57,9 @@
                 <div class="col-12">
                     <nav class="navbar navbar-dark align-items-center">
                         <a class="navbar-brand" href="../home1.php">
-                            <span><i class="fas fa-home fa-2x"></i></span>
-                            <h2 class="text-white h2 text-center d-inline">Administrador</h2>
+                            <span><i class="fas fa-home"></i></span>
                         </a>
+                        <h2 class="text-white h2 text-center">Administrador</h2>
                         <button class="navbar-toggler border-white" 
                             type="button" 
                             data-toggle="collapse" 
@@ -75,7 +79,7 @@
                                 <li class="nav-item"><a class="nav-link text-white h6" href="inventario.php">Inventario</a></li>
                                 <li class="nav-item"><a class="nav-link text-success h6 disabled" href="usuarios.php">Usuarios</a></li>
                                 <li><div class="dropdown-divider"></div></li>
-                                <li class="nav-item"><a class="nav-link text-white h6" href="../index.php">Salir</a></li>
+                                <li class="nav-item"><a class="nav-link text-white h6" href="../ingresoUsuarios.php">Salir</a></li>
                             </ul>
                         </div>
                     </nav>

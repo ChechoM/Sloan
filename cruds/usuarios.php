@@ -31,15 +31,17 @@
 		<link rel="shortcut icon" href="../img/Logo.png">
 	</head>
 	<body style="font-family: 'Lato', sans-serif;">
-		<!-- Contenedor #1 NAVBAR -->
+		<!-- Contenedor #1 -->
 		<div class="container-fluid">
+            
+            <!-- NAVBAR -->
             <div class="row bg-warning">
                 <div class="col-12">
                     <nav class="navbar navbar-dark align-items-center">
                         <a class="navbar-brand" href="../home1.php">
-                            <span><i class="fas fa-home fa-2x"></i></span>
-                            <h2 class="text-white h2 text-center d-inline">Administrador</h2>
+                            <span><i class="fas fa-home"></i></span>
                         </a>
+                        <h2 class="text-white h2 text-center">Administrador</h2>
                         <button class="navbar-toggler border-white" 
                             type="button" 
                             data-toggle="collapse" 
@@ -59,7 +61,7 @@
                                 <li class="nav-item"><a class="nav-link text-white h6" href="inventario.php">Inventario</a></li>
                                 <li class="nav-item"><a class="nav-link text-success h6 disabled" href="usuarios.php">Usuarios</a></li>
                                 <li><div class="dropdown-divider"></div></li>
-                                <li class="nav-item"><a class="nav-link text-white h6" href="../index.php">Salir</a></li>
+                                <li class="nav-item"><a class="nav-link text-white h6" href="../ingresoUsuarios.php">Salir</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -82,7 +84,7 @@
                             <input type="submit" class="btn btn-warning text-white btn-lg mb-5" name="btn_buscar" value="Buscar">
 	                    </div>
                         <div class="col-12">
-                            <a href="insert_usuario.php" class="btn btn-success text-white btn-lg mb-5 ml-3 shadow">Agregar Monitor</a>							
+                            <a href="insert_usuario.php" class="btn btn-success text-white btn-lg mb-5 ml-3 shadow">Agregar Usuario</a>							
                         </div>
 					</form>
                 </div>
@@ -111,18 +113,41 @@
         				</thead>
         				<tbody>
 							<?php foreach($resultado as $fila):?>
+                            <?php 
+                            
+                            $sentencia_select=$con->prepare('CALL select_perfiles(?)');
+                            $sentencia_select->bindParam(1,$fila['tipo_usuario'], PDO::PARAM_INT);
+                            $sentencia_select->execute();
+                            $perfiles=$sentencia_select->fetchAll();
+
+                            foreach ($perfiles as $p_fila) {}
+
+                            if($fila['estado_usuario']==1){
+                                $estado = "Disponible";
+                                $class = "class=\"h6\"";
+                                $classt = "class=\"h6\"";
+
+                            }else {
+                                $estado = "No disponible";
+                                $class = "class=\"h6 bg-danger\"";
+                                $classt = "class=\"h6 table-danger\"";
+
+                                
+                            }
+                            
+                            ?>
         					<tr class="text-center">
-								<td class="h6" scope="row"><?php echo $fila['id_usuario']; ?> </td>
-								<td class="h6"><?php echo $fila['tipo_usuario']; ?> </td>
-								<td class="h6"><?php echo $fila['nombre']; ?> </td>
-								<td class="h6"><?php echo $fila['apellido']; ?> </td>
-								<td class="h6"><?php echo $fila['numero_carnet'];?></td>
-								<td class="h6"><?php echo $fila['estado_usuario']; ?></td>
-								<td class="h6"><?php echo $fila['contrasenia']; ?></td>
+								<td <?php echo $classt; ?> scope="row"><?php echo $fila['id_usuario']; ?> </td>
+								<td <?php echo $classt; ?>><?php echo $p_fila['nombre_perfil']; ?> </td>
+								<td <?php echo $classt; ?>><?php echo $fila['nombre']; ?> </td>
+								<td <?php echo $classt; ?>><?php echo $fila['apellido']; ?> </td>
+								<td <?php echo $classt; ?>><?php echo $fila['numero_carnet'];?></td>
+								<td <?php echo $class; ?>><?php echo $estado; ?></td>
+								<td <?php echo $classt; ?>><?php echo $fila['contrasenia']; ?></td>
 
 								<!-- BOTONES -->
-								<td><a href="update_usuario.php?id_usuario= <?php echo $fila['id_usuario']; ?>" class="h6 text-info">Modificar</a></td>
-								<td><a href="delete_usuario.php?id_usuario= <?php echo $fila['id_usuario']; ?>" class="h6 text-danger" onclick="return confirmarEliminar()">Eliminar</a></td>
+								<td><a href="update_usuario.php?id_usuario= <?php echo $fila['id_usuario']; ?>" class="btn btn-primary btn-gradient text-light text-decoration-none" >Modificar</a></td>
+								<td><a href="delete_usuario.php?id_usuario= <?php echo $fila['id_usuario']; ?>" class="btn btn-danger btn-danger text-light text-decoration-none"  onclick="return confirmarEliminar()">Eliminar</a></td>
         					</tr>
         					<?php endforeach ?>
         				</tbody>

@@ -34,16 +34,18 @@
 		<link rel="shortcut icon" href="../img/Logo.png">
 	</head>
 	<body style="font-family: 'Lato', sans-serif;">
+
 		<!-- Contenedor #1 -->
 		<div class="container-fluid">
+            
             <!-- NAVBAR -->
             <div class="row bg-warning">
                 <div class="col-12">
                     <nav class="navbar navbar-dark align-items-center">
-                        <a class="navbar-brand justify-content-center align-items-center" href="../home1.php">
-                            <span><i class="fas fa-home fa-2x"></i></span>
-                            <h2 class="text-white h2 text-center d-inline">Administrador</h2>
+                        <a class="navbar-brand" href="../home1.php">
+                            <span><i class="fas fa-home"></i></span>
                         </a>
+                        <h2 class="text-white h2 text-center">Administrador</h2>
                         <button class="navbar-toggler border-white" 
                             type="button" 
                             data-toggle="collapse" 
@@ -63,7 +65,7 @@
                                 <li class="nav-item"><a class="nav-link text-white h6" href="inventario.php">Inventario</a></li>
                                 <li class="nav-item"><a class="nav-link text-white h6" href="usuarios.php">Usuarios</a></li>
                                 <li><div class="dropdown-divider"></div></li>
-                                <li class="nav-item"><a class="nav-link text-white h6" href="../index.php">Salir</a></li>
+                                <li class="nav-item"><a class="nav-link text-white h6" href="../ingresoUsuarios.php">Salir</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -85,9 +87,9 @@
 							<input type="text" class="form-control mb-5" name="buscar" placeholder="Buscar devolución" value="<?php if(isset($buscar_text)) echo $buscar_text; ?>">
                             <input type="submit" class="btn btn-warning text-white btn-lg mb-5" name="btn_buscar" value="Buscar">
 	                    </div>
-                        <!-- <div class="col-12">
+                        <div class="col-12">
                             <a href="insert_devoluciones.php" class="btn btn-success text-white btn-lg mb-5 ml-3 shadow">Generar devolución</a>							
-                        </div> -->
+                        </div>
 					</form>
                 </div>
             </div>
@@ -116,7 +118,7 @@
                             <?php foreach($tb_dev as $f_dev):?>
                             <tr class="text-center">
                                 <?php 
-                                    $sentencia_select=$con->prepare('CALL D_nombre(?,?)');
+                                    $sentencia_select=$con->prepare('call D_nombre(?,?)');
                                     $sentencia_select->bindParam(1, $f_dev['id_usuario'], PDO::PARAM_INT);
                                     $sentencia_select->bindParam(2, $f_dev['id_articulo'], PDO::PARAM_INT);
 
@@ -132,15 +134,17 @@
                                    
                                     foreach ($detalle as $f_det){}
 
-                                    date_default_timezone_set('UTC');
+                                    date_default_timezone_set('GMT-5');
                                     $fechaPrestamo = $f_det['fecha_devolucion'];
-                                    $fechaActual = date("Y-m-d");
+                                    //$fechaActual = date("Y-m-d");
+                                    $fechaActual =date("H:i:s", time());
+                                    echo $fechaActual;
 
                                     //if ($fechaPrestamo == $fechaActual || isset($_POST['btn_buscar'])):
                                          
                                 ?>
                                 <td class="h6" scope="row"><?php echo $f_dev['id_devolucion']; ?> </td>
-                                <td class="h6"><?php echo $f_dev['id_usuario']; ?> </td>
+                                <td class="h6"><?php echo $f_art['numero_carnet']; ?> </td>
                                 <td class="h6"><?php echo $f_art['nombre']; ?></td>
                                 <td class="h6"><?php echo $f_art['apellido']; ?></td>
                                 <td class="h6"><?php echo $f_dev['id_articulo']; ?></td>

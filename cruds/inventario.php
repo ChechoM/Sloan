@@ -41,9 +41,9 @@
                 <div class="col-12">
                     <nav class="navbar navbar-dark align-items-center">
                         <a class="navbar-brand" href="../home1.php">
-                            <span><i class="fas fa-home fa-2x"></i></span>
-                            <h2 class="text-white h2 text-center d-inline">Administrador</h2>
+                            <span><i class="fas fa-home"></i></span>
                         </a>
+                        <h2 class="text-white h2 text-center">Administrador</h2>
                         <button class="navbar-toggler border-white" 
                             type="button" 
                             data-toggle="collapse" 
@@ -63,7 +63,7 @@
                                 <li class="nav-item"><a class="nav-link text-success h6 disabled" href="inventario.php">Inventario</a></li>
                                 <li class="nav-item"><a class="nav-link text-white h6" href="usuarios.php">Usuarios</a></li>
                                 <li><div class="dropdown-divider"></div></li>
-                                <li class="nav-item"><a class="nav-link text-white h6" href="../index.php">Salir</a></li>
+                                <li class="nav-item"><a class="nav-link text-white h6" href="../ingresoUsuarios.php">Salir</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -98,7 +98,7 @@
 
             <!-- TABLA -->
 			<div class="row pt-5">
-				<div class="col-12">
+				<div class="col-12 table-responsive">
         			<table class="table table-striped table-hover shadow p-3 mb-5 bg-white rounded">
         				<thead>
         					<tr class="text-center">
@@ -115,24 +115,41 @@
         				</thead>
         				<tbody>
 							<?php foreach($resultado as $fila):?>
+                            <?php if ($fila['disponibilidad']==2 || $fila['estado'] == 2){
+                                        $disponibilidad = "En prestamo";
+                                        $estados = "In activo";
+                                         $estado = "class = \"h6 text-light bg-danger  \"";
+                                         $estado2 = "class = \"h6  table-danger  \"";
+
+
+                                 }else {
+                                    $disponibilidad = "Disponible";
+                                    $estados = "Activo";
+                                     $estado ="class = \"h6\"";
+                                     $estado2 ="class = \"h6\"";
+
+                                
+                                }
+                            ?>
         					<tr class="text-center">
-								<td class="h6" scope="row"><?php echo $fila['id_articulo']; ?> </td>
-								<td class="h6"><?php echo $fila['categoria']; ?> </td>
-								<td class="h6"><?php echo $fila['nombre_articulo']; ?> </td>
-								<td class="h6"><?php echo $fila['descripcion']; ?> </td>
-								<td class="h6"><?php echo $fila['codigo_barras'];?></td>
-								<td class="h6"><?php echo $fila['disponibilidad']; ?></td>
-								<td class="h6"><?php echo $fila['estado']; ?></td>
+								<td <?php echo $estado2; ?> scope="row"><?php echo $fila['id_articulo']; ?> </td>
+								<td <?php echo $estado2; ?>><?php echo $fila['categoria']; ?> </td>
+								<td <?php echo $estado; ?>><?php echo $fila['nombre_articulo']; ?> </td>
+								<td <?php echo $estado2; ?>><?php echo $fila['descripcion']; ?> </td>
+								<td <?php echo $estado2; ?>><?php echo $fila['codigo_barras'];?></td>
+								<td <?php echo $estado2; ?>><?php echo $disponibilidad; ?></td>
+								<td <?php echo $estado2; ?> ><?php echo $estados; ?></td>
 
 								<!-- BOTONES -->
-								<td><a href="update_articulo.php?id_articulo= <?php echo $fila['id_articulo']; ?>" class="h6 text-info">Modificar</a></td>
-								<td><a href="delete_articulo.php?id_articulo= <?php echo $fila['id_articulo']; ?>" class="h6 text-danger" onclick="return confirmarEliminar()">Eliminar</a></td>
+								<td><a href="update_articulo.php?id_articulo= <?php echo $fila['id_articulo']; ?>" class="btn btn-primary btn-gradient text-light text-decoration-none" >Modificar </a></td>
+								<td><a href="delete_articulo.php?id_articulo= <?php echo $fila['id_articulo']; ?>" onclick="return confirmarEliminar()" class="btn btn-danger btn-gradient  text-light text-decoration-none" > Eliminar </a></td>
         					</tr>
-        					<?php endforeach ?>
+        					<?php endforeach ?>                                                             
+                        </div>
         				</tbody>
-        			</table>
-				</div>
-			</div>
+        			</table>                
+				</div>                 
+
 
             <!-- OPCIONES -->
             <div class="row mt-5" style="font-family: 'Yusei Magic', sans-serif;">
@@ -190,8 +207,11 @@
 		</script>
 		
 		<!-- Scripts de Bootstrap -->
+                
+       	
 		<script type="text/javascript" src="../js/jquery-3.5.1.slim.min.js"></script>
 		<script type="text/javascript" src="../js/popper.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+        
 	</body>
 </html>

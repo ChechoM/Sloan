@@ -19,31 +19,11 @@
 			':codigo_barras'=>$codigo_barras,
 			':disponibilidad'=>$disponibilidad,
 			':estado'=>$estado
-			));
-			header('location: inventario.php');
-		}else {
-			echo ("
-				<!-- Modal -->
-				<div class='modal fade' id='exampleModal' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
-				<div class='modal-dialog' role='document'>
-					<div class='modal-content'>
-					<div class='modal-header'>
-						<h5 class='modal-title' id='exampleModalLabel'>Modal title</h5>
-						<button type='button' class='close' data-dismiss='modal' aria-label='Close'>
-						<span aria-hidden='true'>&times;</span>
-						</button>
-					</div>
-					<div class='modal-body'>
-						Los campos estan vacios
-					</div>
-					<div class='modal-footer'>
-						<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
-						<button type='button' class='btn btn-primary'>Save changes</button>
-					</div>
-					</div>
-				</div>
-				</div>"
-			);
+		));
+		header('location: inventario.php');
+		}
+		else {
+			echo ("los campos estan vacios");
 		}
 	}
 ?>
@@ -174,7 +154,7 @@
 
 
 								<div class="col-12 text-center">
-									<input type="submit" name="btn_guardar" value="Guardar" class="btn btn-success text-white btn-lg mb-3 mt-2" data-toggle="modal" data-target="#exampleModal">
+									<input type="submit" name="btn_guardar" value="Guardar" class="btn btn-success text-white btn-lg mb-3 mt-2">
 								</div>
 							</form>	
 						</div>
@@ -195,41 +175,6 @@
 				<div class="col-2"></div>
 			</div>
 		</div>
-
-		<!-- Alertas JS -->
-		<script type="text/javascript">
-			function soloLetras(e){
-				key = e.keyCode || e.which;
-				tecla = String.fromCharCode(key).toLowerCase();
-				letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
-				especiales = "8-37-39-46";
-
-				tecla_especial = false
-				for(var i in especiales){
-					if(key == especiales[i]){
-						tecla_especial = true;
-						break;
-					}
-				}
-
-				if(letras.indexOf(tecla)==-1 && !tecla_especial){
-					alert("Solo se permiten letras");
-					return false;
-				}
-			}
-
-			function validarNumero(e) {
-				tecla = (document.all) ? e.keyCode : e.which;
-				if (tecla==8) {
-					return true;
-				}else {
-					alert("Solo se permiten números");
-				}
-				patron =/[0-9]/;
-				te = String.fromCharCode(tecla); 
-				return patron.test(te); 
-			}
-		</script>
 
 		<!-- Scripts de Bootstrap -->
 		<script type="text/javascript" src="../js/jquery-3.5.1.slim.min.js"></script>
